@@ -59,3 +59,28 @@ collectButton.addEventListener("click", function() {
 closeButton.addEventListener("click", function() {
   popupWindow.style.display = "none";
 });
+
+// document.body.onmousemove = function(e) {
+//     document.documentElement.style.setProperty (
+//       '--x', (
+//         e.clientX+window.scrollX
+//       )
+//       + 'px'
+//     );
+//     document.documentElement.style.setProperty (
+//       '--y', (
+//         e.clientY+window.scrollY
+//       ) 
+//       + 'px'
+//     );
+//   }
+
+const yellowSpot = document.querySelector('#invertedcursor');
+// move the yellow spot to the mouse position
+document.addEventListener('mousemove', function(e) {
+    // Make sure the *center* of the yellow spot is where the
+    // cursor is, not the top left
+    const {clientWidth, clientHeight} = yellowSpot;
+    yellowSpot.style.left = ((e.pageX - (clientWidth / 2)) + 'px');
+    yellowSpot.style.top = (e.pageY - (clientHeight / 2)) + 'px';
+});
