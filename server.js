@@ -36,17 +36,21 @@ app.ws('/', function(ws, req) {
       ws.send(JSON.stringify(server_data));
       server_data = {"action":"story_img", "desc":img_path};
       ws.send(JSON.stringify(server_data));
+      console.log(server_data);
     }
     else if (data.action==="speech_interim")
     {
-      let [html_story_line, correctness_percent] = compareSpeechToStory(data.desc);
+      let [html_story_line, img_path, correctness_percent] = compareSpeechToStory(data.desc);
 
       server_data = {"action":"html_story_text", "desc":html_story_line};
       ws.send(JSON.stringify(server_data));   
+      server_data = {"action":"story_img", "desc":img_path};
+      ws.send(JSON.stringify(server_data));
+      console.log(server_data);
     }
     else if (data.action==="speech_final")
     {
-      let [html_story_line, correctness_percent] = compareSpeechToStory(data.desc);
+      let [html_story_line, img_path, correctness_percent] = compareSpeechToStory(data.desc);
       
       if (correctness_percent>50)
       {

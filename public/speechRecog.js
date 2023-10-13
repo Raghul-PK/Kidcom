@@ -26,9 +26,9 @@ socket.onerror = function(error) {
   alert(`[error]`);
 };
 
-var myTimeout = window.setInterval(function() {
-  console.log('one second has passed without any speech');
-}, 3000);
+// var myTimeout = window.setInterval(function() {
+//   console.log('one second has passed without any speech');
+// }, 3000);
 
 if ("webkitSpeechRecognition" in window) 
 {
@@ -57,7 +57,7 @@ if ("webkitSpeechRecognition" in window)
 
   speechRecognition.onresult = (event) => {
     let interim_transcript = "";
-    console.log(event);
+    let final_transcript = "";
 
     let final_flag = 0;
     for (let i = event.resultIndex; i < event.results.length; ++i) {
@@ -67,21 +67,32 @@ if ("webkitSpeechRecognition" in window)
       } else {
         interim_transcript += event.results[i][0].transcript;
       }    
+      console.log("Final : " + final_transcript);
     }
 
-    interim_transcript = interim_transcript.trim();
-    let data = {"action":"speech_interim", "desc":interim_transcript};
-    socket.send(JSON.stringify(data));
-    
-    if(myTimeout)
+    if (final_transcript!="")
     {
-      window.clearTimeout(myTimeout);
-      myTimeout = window.setInterval(function() {
-        let data = {"action":"speech_final", "desc":interim_transcript};
-        socket.send(JSON.stringify(data));
-        console.log('Two seconds has passed without any speech');
-     }, 2000);
+      let data = {"action":"speech_final", "desc":final_transcript};
+      socket.send(JSON.stringify(data));
+      console.log(data);
     }
+    else
+    {
+      interim_transcript = interim_transcript.trim();
+      let data = {"action":"speech_interim", "desc":interim_transcript};
+      socket.send(JSON.stringify(data));
+    }
+    
+    // if(myTimeout)
+    // {
+    //   window.clearTimeout(myTimeout);
+    //   myTimeout = window.setInterval(function() {
+    //     let data = {"action":"speech_final", "desc":interim_transcript};
+    //     socket.send(JSON.stringify(data));
+    //     console.log(data);
+    //     console.log('Two seconds has passed without any speech');
+    //  }, 2000);
+    // }
     
   };
 

@@ -2,6 +2,9 @@ import fetch from 'node-fetch';
 
 let page = 0;
 
+let img_dir_path = "./Images_without_Text/img";
+let img_count_per_line = [3,3,5,4,5,5,3,2,3,2,2,2,3,2,4,3,3,5,3,2];
+
 let story_lines = [ "Chop Chop Chop", 
                     "The Woodcutter was cutting trees in the forest",
                     "Suddenly the axe slipped out of his hands",
@@ -81,14 +84,14 @@ export function compareSpeechToStory(speechLine)
       modified_html_text += "<span " + str_word_id + ">" + storyArr[i] + "</span> ";
   }
   correctness_percent = (correct_word_count/storyArr3.length)*100;
+
+  let word_counter = speechArr3.length;
+  let img_no = word_counter % img_count_per_line[page];
+
+  let modified_img_path = img_dir_path + "" + page + "" + img_no +".png";
   
-  return [modified_html_text, correctness_percent];
+  return [modified_html_text, modified_img_path, correctness_percent];
 
-}
-
-function updateStoryText(modified_html_text)
-{
-  return modified_html_text;
 }
 
 export function updatePage(button)
@@ -108,7 +111,7 @@ export function updatePage(button)
   }
 
   let page_story_line = modified_html_text;
-  let page_img_path = "./Honest_woodcutter_small/"+page+"1-min.png";
+  let page_img_path = img_dir_path + "" + page + "0.png";;
 
   return [page_story_line, page_img_path];
 }
