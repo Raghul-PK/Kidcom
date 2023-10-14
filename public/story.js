@@ -8,7 +8,7 @@ var closeButton = document.getElementById("close-button");
 var collectButton = document.getElementById("collect-button");
 
 let clicked_word;
-// const synth = window.speechSynthesis; // from Web-speech API
+const synth = window.speechSynthesis; // from Web-speech API
 
 // Listen for messages
 socket2.addEventListener("message", (event) => {
@@ -33,13 +33,13 @@ socket2.addEventListener("message", (event) => {
 $(".nav-button.prev").on("click", function(){
     let data = {"action":"nav_button", "desc":"prev"};
     socket2.send(JSON.stringify(data));
-    // speak("previous");
+    speak("previous");
 });
 
 $(".nav-button.next").on("click", function(){
     let data = {"action":"nav_button", "desc":"next"};
     socket2.send(JSON.stringify(data));
-    // speak("next");
+    speak("next");
 });
 
 $("#story-text").on("click", "span", function(){
@@ -73,7 +73,7 @@ document.addEventListener('mousemove', function(e) {
     $("#story-text").on("mouseover", "span", function(){
         hovered_word = $(this).text();
         console.log(hovered_word);
-        // speak(hovered_word);
+        speak(hovered_word);
         $(this).addClass("increase-word-font-size");
 
         setTimeout(() => {
