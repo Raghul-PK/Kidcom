@@ -101,6 +101,12 @@ body{
     align-self: center;
     max-width: 80%;
     margin: 20px 0;
+    transition: font-size 2s;
+    transition-timing-function: ease-in;
+}
+
+.increase-word-font-size{
+    font-size: 4rem;
 }
 
 .red-text{

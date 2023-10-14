@@ -8,6 +8,7 @@ var closeButton = document.getElementById("close-button");
 var collectButton = document.getElementById("collect-button");
 
 let clicked_word;
+// const synth = window.speechSynthesis; // from Web-speech API
 
 // Listen for messages
 socket2.addEventListener("message", (event) => {
@@ -32,11 +33,13 @@ socket2.addEventListener("message", (event) => {
 $(".nav-button.prev").on("click", function(){
     let data = {"action":"nav_button", "desc":"prev"};
     socket2.send(JSON.stringify(data));
+    // speak("previous");
 });
 
 $(".nav-button.next").on("click", function(){
     let data = {"action":"nav_button", "desc":"next"};
     socket2.send(JSON.stringify(data));
+    // speak("next");
 });
 
 $("#story-text").on("click", "span", function(){
@@ -60,27 +63,36 @@ closeButton.addEventListener("click", function() {
   popupWindow.style.display = "none";
 });
 
-// document.body.onmousemove = function(e) {
-//     document.documentElement.style.setProperty (
-//       '--x', (
-//         e.clientX+window.scrollX
-//       )
-//       + 'px'
-//     );
-//     document.documentElement.style.setProperty (
-//       '--y', (
-//         e.clientY+window.scrollY
-//       ) 
-//       + 'px'
-//     );
-//   }
+const custom_cursor = document.querySelector('#invertedcursor');
 
-const yellowSpot = document.querySelector('#invertedcursor');
-// move the yellow spot to the mouse position
 document.addEventListener('mousemove', function(e) {
-    // Make sure the *center* of the yellow spot is where the
-    // cursor is, not the top left
-    const {clientWidth, clientHeight} = yellowSpot;
-    yellowSpot.style.left = ((e.pageX - (clientWidth / 2)) + 'px');
-    yellowSpot.style.top = (e.pageY - (clientHeight / 2)) + 'px';
+    const {clientWidth, clientHeight} = custom_cursor;
+    custom_cursor.style.left = ((e.pageX - (clientWidth / 2)) + 'px');
+    custom_cursor.style.top = (e.pageY - (clientHeight / 2)) + 'px';
+
+    $("#story-text").on("mouseover", "span", function(){
+        hovered_word = $(this).text();
+        console.log(hovered_word);
+        // speak(hovered_word);
+        $(this).addClass("increase-word-font-size");
+
+        setTimeout(() => {
+            $(this).removeClass("increase-word-font-size");
+        }, 1000);
+    });
 });
+
+function speak(word)
+{
+    // event.preventDefault();
+    if (synth.speaking) {
+        console.log("speechSynthesis.speaking");
+        return;
+    }
+
+    const utterThis = new SpeechSynthesisUtterance(word);
+    utterThis.voice = synth.getVoices()[0]
+    utterThis.pitch = 1;
+    utterThis.rate = 1;
+    synth.speak(utterThis);
+}
