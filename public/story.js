@@ -33,19 +33,25 @@ socket2.addEventListener("message", (event) => {
 $(".nav-button.prev").on("click", function(){
     let data = {"action":"nav_button", "desc":"prev"};
     socket2.send(JSON.stringify(data));
-    speak("previous");
+    // speak("previous");
+    const audioElement = new Audio("./SFX/single_press.mp3");
+    audioElement.play();
 });
 
 $(".nav-button.next").on("click", function(){
     let data = {"action":"nav_button", "desc":"next"};
     socket2.send(JSON.stringify(data));
-    speak("next");
+    // speak("next");
+    const audioElement = new Audio("./SFX/single_press.mp3");
+    audioElement.play();
 });
 
 $("#story-text").on("click", "span", function(){
     clicked_word = $(this).text();
     console.log(clicked_word);
     $(this).addClass("red-text");
+    const audioElement = new Audio("./SFX/popup1.mp3");
+    audioElement.play();
 
     let data = {"action":"click_words", "desc":clicked_word};
     socket2.send(JSON.stringify(data));
@@ -84,7 +90,7 @@ document.addEventListener('mousemove', function(e) {
 
 function speak(word)
 {
-    // event.preventDefault();
+    event.preventDefault();
     if (synth.speaking) {
         console.log("speechSynthesis.speaking");
         return;
