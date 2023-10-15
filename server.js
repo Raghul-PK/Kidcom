@@ -10,16 +10,24 @@ import expressWs from 'express-ws';
 // const expressWs = require('express-ws')(app);
 const app = expressWs(express()).app;
 
-import {updatePage, compareSpeechToStory, getMeaning, wordCollector} from './serverHelper.js';
+import {updatePage, compareSpeechToStory, getMeaning, wordCollector, retrieveDB, createStorySpeechMatch} from './serverHelper.js';
 
 const port = 3000;
 
 app.use(express.static('public'))
 
+// const myLogger = async function (req, res, next) {
+  
+//   next()
+// };
+// app.use(myLogger);
+
 // sendFile will go here
-app.get('/', function(req, res, next) {
+app.get('/', async function(req, res, next) {
+  await retrieveDB("thehonestwoodcutters");
+  await createStorySpeechMatch();
   res.sendFile(path.join(__dirname, './public/story.html'));
-  console.log('get route', req.testing);
+  // console.log('get route', req.testing);
 });
 
 app.ws('/', function(ws, req) {

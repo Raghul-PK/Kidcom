@@ -83,17 +83,6 @@ if ("webkitSpeechRecognition" in window)
       socket.send(JSON.stringify(data));
     }
     
-    // if(myTimeout)
-    // {
-    //   window.clearTimeout(myTimeout);
-    //   myTimeout = window.setInterval(function() {
-    //     let data = {"action":"speech_final", "desc":interim_transcript};
-    //     socket.send(JSON.stringify(data));
-    //     console.log(data);
-    //     console.log('Two seconds has passed without any speech');
-    //  }, 2000);
-    // }
-    
   };
 
   $( window ).on( "load", function() {

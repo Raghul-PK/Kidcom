@@ -1,39 +1,21 @@
 import fetch from 'node-fetch';
+import mongoose from 'mongoose';
 
 let page = 0;
 
 let img_dir_path = "./Images_without_Text/img";
 let img_count_per_line = [3,3,5,4,5,5,3,2,3,2,2,2,3,2,4,3,3,5,3,2];
 
-let story_lines = [ "Chop Chop Chop", 
-                    "The Woodcutter was cutting trees in the forest",
-                    "Suddenly the axe slipped out of his hands",
-                    "Oh god ! My axe fell into this deep river",
-                    "What will I do now ?",
-                    "The river fairy appeared and offered help",
-                    "She dived back into the river and came up asking",
-                    "Is this Golden axe yours ?",
-                    "No, this is not mine",
-                    "The fairy again went in and came up asking",
-                    "Is this Silver axe yours ?",
-                    "No, this is also not mine",
-                    "For the third time, the fairy went in and came up",
-                    "Is this Iron axe yours ?",
-                    "Yes, it is !",
-                    "The fairy smiled and told",
-                    "I am impressed by your honesty",
-                    "Here, take these golden and silver axes as my gift",
-                    "Thank you fairy !!!"];
+let story_lines = [];
+let story_img_urls = [];
 
 // Array of arrays to keep track of correctly spoken words
-let story_speech_match = createStorySpeechMatch();
+let story_speech_match = [];
 
 let collected_words = [];
 
 export function createStorySpeechMatch()
 {
-  let arr_story_speech_match = [];
-
   for (var i=0; i<story_lines.length; i++)
   {
     let storyLine = story_lines[i];
@@ -44,10 +26,9 @@ export function createStorySpeechMatch()
     let storyArr3 = storyLine3.split(" ");
 
     let inside_arr = Array(storyArr3.length).fill(0);
-    arr_story_speech_match.push(inside_arr);
+    story_speech_match.push(inside_arr);
   }
-  
-  return arr_story_speech_match;
+  return true;
 }
 
 
@@ -141,4 +122,33 @@ export function wordCollector(word)
 {
   collected_words.push(word);
   console.log(collected_words);
+}
+
+export async function retrieveDB(collectionsName)
+{
+    await mongoose.connect("mongodb://0.0.0.0:27017/storyDB");
+
+    // Create a new schema - blueprint
+    const storySchema = new mongoose.Schema({
+        page: Number,
+        story_text: String,
+        story_img_url: [String]
+    });
+
+    // Create a new collection 
+    const Story = mongoose.model(collectionsName, storySchema);
+
+    let mystory = await Story.find({});
+
+    for (let i=0; i<mystory.length; i++)
+    {
+        story_lines.push(mystory[i].story_text);
+        story_img_urls.push(mystory[i].story_img_url);
+    }
+
+    mongoose.connection.close()
+
+    console.log(story_lines, story_img_urls);
+
+    return true;
 }
