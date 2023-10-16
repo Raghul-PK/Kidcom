@@ -3,9 +3,6 @@ import mongoose from 'mongoose';
 
 let page = 0;
 
-let img_dir_path = "./Images_without_Text/img";
-let img_count_per_line = [3,3,5,4,5,5,3,2,3,2,2,2,3,2,4,3,3,5,3,2];
-
 let story_lines = [];
 let story_img_urls = [];
 
@@ -67,9 +64,10 @@ export function compareSpeechToStory(speechLine)
   correctness_percent = (correct_word_count/storyArr3.length)*100;
 
   let word_counter = speechArr3.length;
-  let img_no = word_counter % img_count_per_line[page];
+  let img_no = word_counter % story_img_urls[page].length;
 
-  let modified_img_path = img_dir_path + "" + page + "" + img_no +".png";
+  let modified_img_path = "https://storage.googleapis.com/the-honest-woodcutter/" + story_img_urls[page][img_no];
+  console.log(modified_img_path);
   
   return [modified_html_text, modified_img_path, correctness_percent];
 
@@ -92,7 +90,7 @@ export function updatePage(button)
   }
 
   let page_story_line = modified_html_text;
-  let page_img_path = img_dir_path + "" + page + "0.png";;
+  let page_img_path = "https://storage.googleapis.com/the-honest-woodcutter/" + story_img_urls[page][0];;
 
   return [page_story_line, page_img_path];
 }
@@ -128,17 +126,16 @@ export async function retrieveDB(collectionsName)
 {
     await mongoose.connect("mongodb://0.0.0.0:27017/storyDB");
 
-    // Create a new schema - blueprint
     const storySchema = new mongoose.Schema({
         page: Number,
         story_text: String,
         story_img_url: [String]
     });
 
-    // Create a new collection 
     const Story = mongoose.model(collectionsName, storySchema);
 
     let mystory = await Story.find({});
+    console.log(mystory);
 
     for (let i=0; i<mystory.length; i++)
     {

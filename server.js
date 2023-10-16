@@ -16,18 +16,10 @@ const port = 3000;
 
 app.use(express.static('public'))
 
-// const myLogger = async function (req, res, next) {
-  
-//   next()
-// };
-// app.use(myLogger);
-
-// sendFile will go here
 app.get('/', async function(req, res, next) {
   await retrieveDB("thehonestwoodcutters");
   await createStorySpeechMatch();
   res.sendFile(path.join(__dirname, './public/story.html'));
-  // console.log('get route', req.testing);
 });
 
 app.ws('/', function(ws, req) {
