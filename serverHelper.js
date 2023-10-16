@@ -124,7 +124,7 @@ export function wordCollector(word)
 
 export async function retrieveDB(collectionsName)
 {
-    await mongoose.connect("mongodb://0.0.0.0:27017/storyDB");
+    await mongoose.connect("mongodb+srv://pkraghul2001:123raghulpk@kidcom.yzvdnuj.mongodb.net/storyDB");
 
     const storySchema = new mongoose.Schema({
         page: Number,
