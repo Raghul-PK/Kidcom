@@ -1,4 +1,4 @@
-let socket = new WebSocket("ws://murmuring-everglades-08813-a514b5e60473.herokuapp.com/");;
+let socket = new WebSocket("wss://murmuring-everglades-08813-a514b5e60473.herokuapp.com/");;
 
 var recognizing = false;
 
