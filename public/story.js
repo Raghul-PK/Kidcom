@@ -1,5 +1,4 @@
-let host = location.origin.replace(/^http/, 'ws');
-let socket2 = new WebSocket(host);
+let socket2 = new WebSocket("ws://murmuring-everglades-08813-a514b5e60473.herokuapp.com/");
 
 // Get the elements by their ID
 var popupWindow = document.getElementById("popup-window");

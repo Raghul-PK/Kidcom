@@ -6,18 +6,13 @@ const __dirname = path.dirname(__filename);
 
 import express from 'express';
 import expressWs from 'express-ws';
-// const app = express();
-// const expressWs = require('express-ws')(app);
+
 const app = expressWs(express()).app;
+const port = process.env.PORT || 3000;
 
 import {updatePage, compareSpeechToStory, getMeaning, wordCollector, retrieveDB, createStorySpeechMatch} from './serverHelper.js';
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-  port = 3000;
-}
-
-app.use(express.static('public'))
+app.use(express.static('public'));
 
 app.get('/', async function(req, res, next) {
   await retrieveDB("thehonestwoodcutters");

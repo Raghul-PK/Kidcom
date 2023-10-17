@@ -1,5 +1,4 @@
-let host = location.origin.replace(/^http/, 'ws');
-let socket = new WebSocket(host);
+let socket = new WebSocket("ws://murmuring-everglades-08813-a514b5e60473.herokuapp.com/");;
 
 var recognizing = false;
 
