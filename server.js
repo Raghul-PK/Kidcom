@@ -12,8 +12,6 @@ const app = expressWs(express()).app;
 
 import {updatePage, compareSpeechToStory, getMeaning, wordCollector, retrieveDB, createStorySpeechMatch} from './serverHelper.js';
 
-const port = 3000;
-
 app.use(express.static('public'))
 
 app.get('/', async function(req, res, next) {
@@ -75,6 +73,11 @@ app.ws('/', function(ws, req) {
     }
   });
 });
+
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
 
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
