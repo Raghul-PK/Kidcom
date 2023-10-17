@@ -1,4 +1,5 @@
-let socket2 = new WebSocket("ws://localhost:3000/");
+let host = location.origin.replace(/^http/, 'ws');
+let socket2 = new WebSocket(host);
 
 // Get the elements by their ID
 var popupWindow = document.getElementById("popup-window");

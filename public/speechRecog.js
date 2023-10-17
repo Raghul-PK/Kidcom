@@ -1,4 +1,5 @@
-let socket = new WebSocket("ws://localhost:3000/");
+let host = location.origin.replace(/^http/, 'ws');
+let socket = new WebSocket(host);
 
 var recognizing = false;
 
