@@ -4,3 +4,5 @@ This is my first proper attempt to learn  Web Dev stuff;
 - Documenting the journey on Medium for better reference : 
 
 Audio file credits : Zapsplat
+
+Note : Currently app crashes sometimes (Will fix it)
