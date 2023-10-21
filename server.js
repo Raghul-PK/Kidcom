@@ -128,7 +128,7 @@ io.on('connection', (socket) => {
         {
           let [story_line, img_path] = updatePage("next");
         
-          io.emit("html_story_text", html_story_line);
+          io.emit("html_story_text", story_line);
           io.emit("story_img", img_path);
         } 
     });
