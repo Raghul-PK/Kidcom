@@ -1,34 +1,4 @@
-let socket = new WebSocket("wss://murmuring-everglades-08813-a514b5e60473.herokuapp.com/");;
-
 var recognizing = false;
-
-socket.addEventListener("message", (event) => {
-  var data = JSON.parse(event.data);
-  // console.log("story.js --> " + data.action + ", " + data.desc);
-
-  if (data.action==="html_story_text")
-      $("#story-text").html(data.desc); // Update story-line
-  else if (data.action==="story_img")
-      $("#story-img").attr("src", data.desc); // Update image
-  
-});
-
-socket.onclose = function(event) {
-  if (event.wasClean) {
-    alert(`[close] Connection closed cleanly, code=${event.code} reason=${event.reason}`);
-  } else {
-    alert('[close] Connection died');
-  }
-  console.log(event);
-};
-
-socket.onerror = function(error) {
-  alert(`[error]`);
-};
-
-// var myTimeout = window.setInterval(function() {
-//   console.log('one second has passed without any speech');
-// }, 3000);
 
 if ("webkitSpeechRecognition" in window) 
 {
@@ -72,15 +42,12 @@ if ("webkitSpeechRecognition" in window)
 
     if (final_transcript!="")
     {
-      let data = {"action":"speech_final", "desc":final_transcript};
-      socket.send(JSON.stringify(data));
-      console.log(data);
+      socket.emit("speech_final", final_transcript);
     }
     else
     {
       interim_transcript = interim_transcript.trim();
-      let data = {"action":"speech_interim", "desc":interim_transcript};
-      socket.send(JSON.stringify(data));
+      socket.emit("speech_interim", interim_transcript);
     }
     
   };

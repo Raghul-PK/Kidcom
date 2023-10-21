@@ -113,7 +113,37 @@ io.on('connection', (socket) => {
         io.emit("html_story_text", story_line);
         io.emit("story_img", img_path);
     });
-  });
+
+    socket.on("speech_interim", (msg) => {
+        console.log("server.js --> " + msg);
+        let [html_story_line, img_path, correctness_percent] = compareSpeechToStory(msg);
+        io.emit("html_story_text", html_story_line);
+        io.emit("story_img", img_path);
+    });
+
+    socket.on("speech_final", (msg) => {
+        console.log("server.js --> " + msg);
+        let [html_story_line, img_path, correctness_percent] = compareSpeechToStory(msg);
+        if (correctness_percent>50)
+        {
+          let [story_line, img_path] = updatePage("next");
+        
+          io.emit("html_story_text", html_story_line);
+          io.emit("story_img", img_path);
+        } 
+    });
+
+    socket.on("click_words", async (msg) => {
+        console.log("server.js --> " + msg);
+        let meaning = await getMeaning(msg);
+        io.emit("story_word_meaning", meaning);
+    });
+
+    socket.on("collected_word", (msg) => {
+        wordCollector(msg);
+    });
+
+});
 
 server.listen(3000, () => {
   console.log('server running at http://localhost:3000');
