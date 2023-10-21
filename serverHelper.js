@@ -134,7 +134,7 @@ export async function retrieveDB(collectionsName)
 
     const Story = mongoose.model(collectionsName, storySchema);
 
-    let mystory = await Story.find({});
+    let mystory = await Story.find({}).sort( { page: 1 } )
     console.log(mystory);
 
     for (let i=0; i<mystory.length; i++)

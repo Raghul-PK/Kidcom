@@ -1,4 +1,4 @@
-let socket2 = new WebSocket("wss://murmuring-everglades-08813-a514b5e60473.herokuapp.com/");
+const socket = io();
 
 // Get the elements by their ID
 var popupWindow = document.getElementById("popup-window");
@@ -10,38 +10,32 @@ var collectButton = document.getElementById("collect-button");
 let clicked_word;
 const synth = window.speechSynthesis; // from Web-speech API
 
-// Listen for messages
-socket2.addEventListener("message", (event) => {
-    var data = JSON.parse(event.data);
-    console.log("story.js --> " + data.action + ", " + data.desc);
-
-    if (data.action==="html_story_text")
-        $("#story-text").html(data.desc); // Update story-line
-    else if (data.action==="story_img")
-        $("#story-img").attr("src", data.desc); // Update image
-    else
-    {
-        event.preventDefault();
-        popupWindow.style.display = "block";
-        $("#collect-button").text("Collect");
-        $("#popup-word").text(clicked_word);
-        $("#popup-meaning").text(data.desc);
-    }
-
+// Listen for messages from server
+socket.on("html_story_text", (msg) => {
+    console.log("story.js --> " + msg);
+    $("#story-text").html(msg); // Update story-line
+});
+socket.on("story_img", (msg) => {
+    console.log("story.js --> " + msg);
+    $("#story-img").attr("src", msg); // Update image
+});
+socket.on("story_word_meaning", (msg) => {
+    console.log("story.js --> " + msg);
+    event.preventDefault();
+    popupWindow.style.display = "block";
+    $("#collect-button").text("Collect");
+    $("#popup-word").text(clicked_word);
+    $("#popup-meaning").text(msg);
 });
 
 $(".nav-button.prev").on("click", function(){
-    let data = {"action":"nav_button", "desc":"prev"};
-    socket2.send(JSON.stringify(data));
-    // speak("previous");
+    socket.emit('nav_button', "prev");
     const audioElement = new Audio("./SFX/single_press.mp3");
     audioElement.play();
 });
 
 $(".nav-button.next").on("click", function(){
-    let data = {"action":"nav_button", "desc":"next"};
-    socket2.send(JSON.stringify(data));
-    // speak("next");
+    socket.emit('nav_button', "next");
     const audioElement = new Audio("./SFX/single_press.mp3");
     audioElement.play();
 });
@@ -53,15 +47,14 @@ $("#story-text").on("click", "span", function(){
     const audioElement = new Audio("./SFX/popup1.mp3");
     audioElement.play();
 
-    let data = {"action":"click_words", "desc":clicked_word};
-    socket2.send(JSON.stringify(data));
+    socket.emit('click_words', clicked_word);
 });
 
 collectButton.addEventListener("click", function() {
     $("#collect-button").text("Collected");
     let word = $("#popup-word").text();
-    let data = {"action":"collected_word", "desc":word};
-    socket2.send(JSON.stringify(data));
+
+    socket.emit('collected_word', word);
   });
 
 // Hide the pop-up window when the close button is clicked
